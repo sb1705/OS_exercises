@@ -10,10 +10,6 @@
 #include <stddef.h>
 
 
-#define MAX_DIM 500
-
-
-
 
 int is_regular_file(const char *path)
 {
