@@ -56,28 +56,6 @@ while(scan=readdir(FD)){
       fprintf(stream, "%ld %s\n",size, filename);
     }
 
-
-    /*      stat(c_scan->d_name,&s2); //last mod file.c
-          time2=s2.st_mtime;
-          printf("c_scan :%s\n",c_scan->d_name);
-          if(difftime(time1,time2)>0){
-
-            strcpy(myArgv, "gcc ");
-            for(i=2; i<argc; i++){ strcat(myArgv,argv[i]);}
-            strcat(myArgv," -o ");
-						strcat(myArgv,argv[1]);
-						strcat(myArgv," ");
-            strcat(myArgv,c_scan->d_name);
-            printf("%s\n",myArgv);
-            myexec(myArgv);
-					}else{
-
-						printf("%s:run genobj first\n",filename );
-
-					}
-
-		  }
-	*/
  }
  fclose(stream);
  closedir (FD);
