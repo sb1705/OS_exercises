@@ -14,8 +14,6 @@
 #include <stddef.h>
 #include <sys/wait.h>
 
-#define MAX_DIM 500
-#define SHELL "/bin/sh"
 
 #ifdef	ASTRUBALE
  struct stat {
