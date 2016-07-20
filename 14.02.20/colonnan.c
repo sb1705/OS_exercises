@@ -59,6 +59,8 @@ if(S_ISREG(s.st_mode)){
       }
 
     }
+    free(buf);
+    buf=NULL;
     printf("%d\n",count );
   }else{
     printf("Non è un file di testo\n" );
