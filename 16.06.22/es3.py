@@ -19,7 +19,10 @@ for (dirpath, dirnames, filenames) in os.walk(path):
 
 for c in names:
     (name, ext) = os.path.splitext(c)
-    allnames.append(name)
+    if((ext=='.tgz')or(ext=='.old')):
+        continue
+    else:
+        allnames.append(name)
 
 
 for n,c in Counter(allnames).most_common(5):
