@@ -64,16 +64,16 @@ while(fgets(f, BUFSIZ, stream)){//f legge riga per riga
     if(!strcmp(f+strlen(f)-strlen(filename), filename)){
       l=atoi(f); //l ha la lunghezza del filename
     }
+   //sommo la lunghezza dei file che precedono quello che sto cercando
+   if(l==0){
+	strcat(buf,strtok(f," "));
+   }
+   ltot+=atoi(buf);
+   strcpy(buf,"");//svuoto il buffer
 
-		if(l==0){
-			strcat(buf,strtok(f," "));
-		}
-		ltot+=atoi(buf);
-		strcpy(buf,"");
-
-		if(f[0]==10){//se troviamo come primo carattere un \n
-			break;
-		}
+  if(f[0]==10){//se troviamo come primo carattere un \n
+	break;
+  }
  }
 filename=strtok(filename,"\n");
 new=fopen(filename,"w");
@@ -92,7 +92,7 @@ ltot=0;
 while (ltot<l){
      a = fgetc(stream);
      fputc(a, new);
-		 ltot++;
+     ltot++;
   }
 
  fclose(stream);
