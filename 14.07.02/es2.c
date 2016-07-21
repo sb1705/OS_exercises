@@ -13,28 +13,8 @@ deve creare il file 'file1' recuperando il contenuto dal file generato da myt2 d
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stddef.h>
-#include <sys/wait.h>
-
-int split(char line[], char **command){
-
-	int counter=0;
-	char *token;
-
-	strtok(line, "\n");
-	token = strtok(line, " ");
-	counter++;
-	while( token != NULL )
-	{
-		if(command){
-			command[counter-1] = token;
-		}
-		token = strtok(NULL, " ");
-		counter++;
-	}
 
 
-	return counter;
-}
 
 int main(int argc, char *argv[]){
 
