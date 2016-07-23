@@ -51,11 +51,12 @@ if(S_ISREG(s.st_mode)){
     count=0;
     buf=(char *)malloc(BUFSIZ + 1);
     for(i=0;i<n;i++){
-      count=getline(&buf,&size,stream);//count conterà anche il \n, se volessimo il contrario basterebbe fare count--
+      count=getline(&buf,&size,stream);
       if(count == -1) {
         printf("Il file ha meno di n linee\n");
         exit(1);
       }
+      count--;//non conto anche \n come carattere
     }
     free(buf);
     buf=NULL;
