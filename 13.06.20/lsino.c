@@ -15,6 +15,8 @@ demo/link.c 1972528*/
 
 
 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,134 +26,81 @@ demo/link.c 1972528*/
 #include <sys/stat.h>
 #include <errno.h>
 
-
-void merge(struct node a[], int left, int center, int right){
-	int i, j, k;
-	// vettore di appoggio
-	struct node b[100]; //se questo array è troppo piccolo non funziona
-	i = left;
-	j = center+1;
-	k = 0;
-	//fusione delle 2 meta'
-	while ((i<=center) && (j<=right))
-	{
-		if (a[i].inodenum <= a[j].inodenum)
-		{
-			b[k] = a[i];
-			i++;
-		}
-		else
-		{
-			b[k] = a[j];
-			j++;
-		}
-		k++;
-	}
-
-	//se i e' minore di center significa che alcuni elementi
-	//della prima meta' non sono stati inseriti nel vettore
-	while (i<=center)
-	{
-		//allora li aggiungo in coda al vettore
-		b[k] = a[i];
-		i++;
-		k++;
-	}
-
-	//se j a' minore di right significa che alcuni elementi
-	//della seconda meta' non sono stati inseriti nel vettore
-	while (j<=right)
-	{
-		//allora li aggiungo in coda al vettore
-		b[k] = a[j];
-		j++;
-		k++;
-	}
-
-	//alla fine copio il vettore di appoggio b nel vettore a
-	for (k=left; k<=right; k++)
-	{
-		a[k] = b[k-left];
-	}
-}
-
-void mergesort(struct node a[], int left, int right)
-{
-	//indice dell'enemento mediano
-	int center;
-	//se ci sono almeno di 2 elementi nel vettore
-	if(left<right)
-	{
-		//divido il vettore in 2 parti
-		center = (left+right)/2;
-		//chiamo la funzione per la prima meta'
-		mergesort(a, left, center);
-		//chiamo la funzione di ordinamento per la seconda meta'
-		mergesort(a, center+1, right);
-		//chiamo la funzione per la fusione delle 2 meta' ordinate
-		merge(a, left, center, right);
-	}
-}
-struct node
-{
+struct node{
 	int inodenum;
 	char name[1024];
 };
 
-
-static int confronto (struct node *n1, struct node *n2)
+int node_cmp (const void *v1, const void *v2)
 {
-	return (n1->inodenum - n2->inodenum);
+  const struct node *c1 = v1;
+  const struct node *c2 = v2;
+
+  return (c1->inodenum - c2->inodenum);
 }
 
 int main (int argc, char *argv[]){
-
- 	if (argc != 2){
- 		fprintf(stderr, "Expected 1 parameter");
- 		return(-1);
- 	}
-
-
- 	DIR* FD;
- 	struct dirent* in_file;
- 	int count=0;
- 	int i=0;
+	DIR* FD;
+	struct dirent* dir_entry;
+	int count=0;
+	int i=0;
+	char *dirname, *filename;
+	struct node *nodeArray;
 
 
- 	/* Scanning the in directory */
- 	if (NULL == (FD = opendir (argv[1])))
- 	{
- 		fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
+	if(argc <2){
+		dirname=malloc(strlen("."));
+		dirname=".";
+	}
+	else{
+		dirname=argv[1];
+	}
 
- 		return -1;
- 	}
+	printf("%s\n",dirname );
+	/* Scanning the in directory */
+	if (NULL == (FD = opendir (dirname)))
+	{
+		fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
 
- 	chdir(argv[1]);
+		return -1;
+	}
 
- 	while ((in_file = readdir(FD))) 	{
- 		count++;
- 	}
+	//chdir(dirname); <-- PERCHÈ SERVE?
 
- 	struct node nodeArray[count];
- 	rewinddir(FD);
+	//conta le directory entry
+	while ((dir_entry = readdir(FD)))
+	{
+		count++;
+	}
 
- 	while ((in_file = readdir(FD)))	{
+	rewinddir(FD);
 
- 		memset(nodeArray[i].name,0,1024); // Need to reset the name, without it there may be some rubbish in memory
- 		// Insert every file name-ino in a list
- 		strcat(nodeArray[i].name, argv[1]);
- 		strcat(nodeArray[i].name, "/");
- 		strcat(nodeArray[i].name, in_file->d_name);
- 		nodeArray[i].inodenum=in_file->d_ino;
- 		i++;
- 	}
+	nodeArray=malloc(count*sizeof(struct node));
 
- 	mergesort(nodeArray,0,count-1);
+	while ((dir_entry = readdir(FD)))
+	{
 
- 	for(i=0;i<count;i++){
- 		printf("%s %d\n",nodeArray[i].name, nodeArray[i].inodenum);
- 	}
+		filename=&(nodeArray[i].name[0]);
+
+		memset(filename,'0',1); //Need to reset the name, without it there may be some rubbish in memory
+
+		//Insert every file name-ino in the array
+		strcpy(filename, dirname);
+		strcat(nodeArray[i].name, "/");
+		strcat(nodeArray[i].name, dir_entry->d_name);
+
+		nodeArray[i].inodenum=dir_entry->d_ino;
+		//printf("Array[%d] : nome=%s, inode=%d\n", i, nodeArray[i].name, nodeArray[i].inodenum );
+		i++;
+	}
 
 
- 	return 0;
+	qsort (nodeArray, count, sizeof (struct node), node_cmp);
+
+	for(i=0;i<count;i++){
+		printf("%s %d\n",nodeArray[i].name, nodeArray[i].inodenum);
+	}
+
+
+	return 0;
 }
