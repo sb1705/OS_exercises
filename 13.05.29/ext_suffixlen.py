@@ -28,3 +28,27 @@ for f in os.listdir(sys.argv[1]):
 
 for key, siz in coppie.items():
     print('{} : {}'.format(key, siz))
+    
+    
+'''
+Soluzione Giulio
+Lui ha considerato tutto il sottoalbero
+
+import sys, os
+
+ext_len={}
+
+for root, dirs, files in os.walk(sys.argv[1], topdown=True):
+	for file in files:
+		path=os.path.join(sys.argv[1],file)
+		filename, file_extension = os.path.splitext(path)
+		if file_extension=='':
+			continue
+		size=os.path.getsize(path)
+		if not file_extension in ext_len:
+			ext_len[file_extension]=size
+		else:
+			ext_len[file_extension] += size
+
+print ext_len
+'''
