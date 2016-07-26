@@ -20,10 +20,13 @@ for f in os.listdir(sys.argv[1]):
     path=os.path.join(sys.argv[1],f)
     size=os.path.getsize(path) #get the size of the file
     filename, extension = os.path.splitext(path)
-    if coppie.has_key(extension):
-        coppie[extension]=coppie[extension]+size
+    if(extension==""):
+        continue
     else:
-        coppie[extension]=size
+        if coppie.has_key(extension):
+            coppie[extension]=coppie[extension]+size
+        else:
+            coppie[extension]=size
 
 
 for key, siz in coppie.items():
