@@ -8,7 +8,8 @@ char *readlink_malloc (const char *filename){
   char *buffer = NULL;
 
   while (1)    {
-      buffer = (char *) xrealloc (buffer, size);
+      //attempts to resize the memory block pointed to by ptr that was previously allocated with a call to malloc or callo
+      buffer = (char *) xrealloc (buffer, size); 
       int nchars = readlink (filename, buffer, size);
       if (nchars < 0)
         {
