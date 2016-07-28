@@ -42,16 +42,18 @@ int split(char line[], char **command){
 }
 
 void myexec (const char *line){
+	//The strdup() function returns a pointer to a new string which is a duplicate of the string s. Memory for the new string is obtained with malloc(3), and can be freed with free(3). */
+	char *buf/*=strdup(line)*/;
 
-	char *buf=strdup(line);
 	int argc=split(buf,NULL);
-	char **command=calloc(argc+1,sizeof(char *));
+
+	char **command=calloc(argc+1,sizeof(char *));//come malloc ma setta la mem allocata a 0
+
 	buf=strdup(line);
 	split(buf,command);
 	execvp(command[0], command);
 
 }
-
 
 int main(int argc, char *argv[]) {
 	
