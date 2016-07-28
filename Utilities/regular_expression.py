@@ -18,11 +18,33 @@ for root, dirs, files in os.walk(".", topdown=True):
 	if depth>0: #ignora quelli delle sottodirectory
 		continue
 	for filename in files:
-		print filename
 		path = os.path.join(".",filename)
 		if fnmatch.fnmatch(filename, sys.argv[1]):
 			print path
 
 			size += os.path.getsize(path)
+
+print size
+
+
+
+''' ALTRO MODO PER IGNORARE I FILE NELLE SOTTODIRECTORY '''
+
+import sys, os,fnmatch
+size=0
+
+path="."
+
+
+for root, dirs, files in os.walk(".", topdown=True):
+
+	for filename in files:
+		
+		path = os.path.join(".",filename)
+		if fnmatch.fnmatch(filename, sys.argv[1]):
+			print path
+
+			size += os.path.getsize(path)
+	break;
 
 print size
